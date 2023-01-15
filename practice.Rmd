@@ -31,3 +31,31 @@ ggplot(data = mpg) +
   # <COORDINATE_FUNCTON> + <FACET_FUNCTION>
   coord_flip() + facet_wrap(~class, ncol = 2)
 ```
+
+```{r}
+library(nycflights13)
+filter(flights, month == 11 | month == 12)
+```
+
+```{r}
+filter(flights, month %in% c(11,12))
+```
+
+```{r}
+filter(flights, !(arr_delay > 120 | dep_delay >120))
+```
+
+```{r}
+filter(flights, arr_delay <= 120, dep_delay <= 120)
+```
+
+```{r}
+arrange(flights, desc(dep_delay))
+```
+
+```{r}
+select(flights, contains("delay"))
+```
+
+
+

@@ -10,6 +10,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 `source` https://r4ds.had.co.nz/data-visualisation.html 
 
+```{r echo=FALSE}
+if(!require(tidyverse)) { install.packages("tidyverse"); library(tidyverse); }
+```
+
+
 # ggplot(data = <DATA>) + 
 #   <GEOM_FUNCTION>(
 #     mapping = aes(<MAPPINGS>),

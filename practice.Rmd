@@ -1,11 +1,15 @@
 ---
-title: "`r Sys.Date()"
+title: "TIL`r format(Sys.Date(), '%Y%m%d')`"
 output: html_document
-date: "2023-01-14"
+date: "`r Sys.Date()`"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
 ```
 
 `source` https://r4ds.had.co.nz/data-visualisation.html 
@@ -14,15 +18,17 @@ knitr::opts_chunk$set(echo = TRUE)
 if(!require(tidyverse)) { install.packages("tidyverse"); library(tidyverse); }
 ```
 
-
-# ggplot(data = <DATA>) + 
-#   <GEOM_FUNCTION>(
-#     mapping = aes(<MAPPINGS>),
-#     stat = <STAT>, 
-#     position = <POSITION>
-#   ) +
-#   <COORDINATE_FUNCTION> +
-#   <FACET_FUNCTION>
+## ggplot grammer 
+```R
+ggplot(data = <DATA>) +
+ <GEOM_FUNCTION>(
+   mapping = aes(<MAPPINGS>),
+   stat = <STAT>,
+   position = <POSITION>
+ ) +
+ <COORDINATE_FUNCTION> +
+ <FACET_FUNCTION>
+```
 
 ```{r}
 ggplot(data = mpg) + 

@@ -12,56 +12,33 @@ knitr::opts_chunk$set(
 )
 ```
 
-`source` https://r4ds.had.co.nz/data-visualisation.html 
+# minmax 정규화 정리
 
-```{r echo=FALSE}
-if(!require(tidyverse)) { install.packages("tidyverse"); library(tidyverse); }
-```
+## 직접 계산하는 방법
 
-## ggplot grammer 
-```R
-ggplot(data = <DATA>) +
- <GEOM_FUNCTION>(
-   mapping = aes(<MAPPINGS>),
-   stat = <STAT>,
-   position = <POSITION>
- ) +
- <COORDINATE_FUNCTION> +
- <FACET_FUNCTION>
+```{r}
+pg <- palmerpenguins::penguins
 ```
 
 ```{r}
-ggplot(data = mpg) + 
-  # <GEOM_FUNCTION>()
-  geom_point(mapping = aes(x = displ, y = hwy)) +
-  # <COORDINATE_FUNCTON> + <FACET_FUNCTION>
-  coord_flip() + facet_wrap(~class, ncol = 2)
+minmax_scale <- function(x) {
+  (x - min(x, na.rm = T))/(max(x, na.rm = T)-min(x, na.rm = T))
+}
+
+body_mass_minmax <- minmax_scale(pg$body_mass_g)
+summary(body_mass_minmax)
 ```
 
-```{r}
-library(nycflights13)
-filter(flights, month == 11 | month == 12)
-```
+## caret package를 이용한 방법
 
 ```{r}
-filter(flights, month %in% c(11,12))
+require(caret)
+minmax_process <- preProcess(as.data.frame(pg$body_mass_g), method = c("range"))
+body_mass_minmax <- predict(minmax_process, as.data.frame(pg$body_mass_g))
+summary(body_mass_minmax)
 ```
 
-```{r}
-filter(flights, !(arr_delay > 120 | dep_delay >120))
-```
 
-```{r}
-filter(flights, arr_delay <= 120, dep_delay <= 120)
-```
-
-```{r}
-arrange(flights, desc(dep_delay))
-```
-
-```{r}
-select(flights, contains("delay"))
-```
 
 
 

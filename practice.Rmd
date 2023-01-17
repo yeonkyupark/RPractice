@@ -2,6 +2,8 @@
 title: "TIL`r format(Sys.Date(), '%Y%m%d')`"
 output: html_document
 date: "`r Sys.Date()`"
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -50,8 +52,19 @@ nycflights13::flights %>%
 
 
 
+```{r}
+nycflights13::flights %>% 
+  print(n = 5, width = Inf)
+```
 
+```{r}
+table1
+```
 
+```{r}
+table1 %>% 
+  count(year, wt = cases)
+```
 
 
 

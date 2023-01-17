@@ -12,31 +12,40 @@ knitr::opts_chunk$set(
 )
 ```
 
-# minmax 정규화 정리
-
-## 직접 계산하는 방법
+# R fro Data Science
 
 ```{r}
-pg <- palmerpenguins::penguins
+1 / 200 * 30
+(59 + 73 + 2) / 3
+sin(pi / 2)
 ```
+
+`snake_case` recommended.
 
 ```{r}
-minmax_scale <- function(x) {
-  (x - min(x, na.rm = T))/(max(x, na.rm = T)-min(x, na.rm = T))
-}
+library(tidyverse)
+library(nycflights13)
 
-body_mass_minmax <- minmax_scale(pg$body_mass_g)
-summary(body_mass_minmax)
+popular_dests <- flights %>% 
+  group_by(dest) %>% 
+  filter(n() > 365)
+
+popular_dests %>% 
+  filter(arr_delay > 0) %>% 
+  mutate(prop_delay = arr_delay / sum(arr_delay)) %>% 
+  select(year:day, dest, arr_delay, prop_delay)
 ```
 
-## caret package를 이용한 방법
 
-```{r}
-require(caret)
-minmax_process <- preProcess(as.data.frame(pg$body_mass_g), method = c("range"))
-body_mass_minmax <- predict(minmax_process, as.data.frame(pg$body_mass_g))
-summary(body_mass_minmax)
-```
+
+
+
+
+
+
+
+
+
 
 
 

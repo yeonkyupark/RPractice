@@ -21,22 +21,42 @@ library(caret)
 ```
 
 ```{r}
-nearZeroVar(iris[, -5], saveMetrics = TRUE)
+samp <- data.frame(
+  a = sample(10, 100, replace = T),
+  b = seq(1:100),
+  c = rnorm(100),
+  d = rep(1, 100)
+)
+```
+
+## zero variance 추출
+
+```{r}
+caret::nearZeroVar(samp)
+```
+
+## zero variance 열 이름 출력
+
+```{r}
+caret::nearZeroVar(samp, name = T)
+```
+
+## zero variance metrix 출력
+
+```{r}
+caret::nearZeroVar(samp, saveMetrics = T)
+```
+
+# Near Zero Variance 열 제거
+
+```{r}
+samp[, -caret::nearZeroVar(samp)] %>% 
+  head()
 ```
 
 ```{r}
-data(BloodBrain)
-nearZeroVar(bbbDescr)
-str(bbbDescr)
-```
-
-
-```{r}
-nearZeroVar(bbbDescr, saveMetrics = T, names = TRUE) %>% 
-  filter(nzv == TRUE)
-```
-
-```{r}
-nearZeroVar(pg[,3:6], saveMetrics = T)
+samp %>% 
+  summarise(across(everything(), ~ c(mean(.), sd(.)))) %>% 
+  `rownames<-`(c("Mean", "SD"))
 ```
 

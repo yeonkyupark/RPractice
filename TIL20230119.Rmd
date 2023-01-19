@@ -1,0 +1,35 @@
+---
+title: "TIL`r format(Sys.Date(), '%Y%m%d')`"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+library(caret)
+```
+
+## jitter in R
+
+```{r}
+is.outlier <- function (x, na.rm = T) {
+  x < quantile(x, .25, na.rm = T) - 1.5 * IQR(x, na.rm = T) |
+    x > quantile(x, .75, na.rm = T) + 1.5 * IQR(x, na.rm = T)
+}
+
+pg %>% group_by(species) %>%
+  mutate(outlier.p = is.outlier(body_mass_g)) %>%
+  ungroup() -> pg
+
+ggplot(pg, aes(x = species, y = body_mass_g, fill = species)) +
+  geom_boxplot(outlier.color = NA) +
+  geom_jitter(data = pg[pg$outlier.p,], aes(col = I("red"))) +
+  theme_bw()
+```
+

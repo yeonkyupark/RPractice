@@ -30,7 +30,7 @@ df <- data.frame(
 
 ```{r}
 df_mod1 <- reshape2::melt(df, id.vars='col1', 
-                  measure.vars=c('col2', 'col3', 'col4')); df_mod
+                  measure.vars=c('col2', 'col3', 'col4')); df_mod1
 ```
 
 ```{r}
@@ -45,14 +45,24 @@ df_mod3 <- df %>%
 ```
 
 # Long -> Wide
+col1
+variable
+value
 
 ```{r}
+reshape2::dcast(data = df_mod1, formula = col1 ~ variable, sum, value.var = "value")
+```
+
+
+```{r eval=FALSE}
 df_mod3 %>% spread( key = cols, value = value)
 ```
 
+`spread()`는 데이터 중복으로 인해 error 발생
+
 ```{r}
-df_mod3 %>%
-  pivot_wider(
-  names_from = cols, values_from = value, names_sep = "")
+df_mod3 %>% 
+  pivot_wider(names_from = cols, values_from = value, values_fn = list) %>% 
+  unnest(cols = everything())
 ```
 

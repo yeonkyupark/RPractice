@@ -11,52 +11,48 @@ knitr::opts_chunk$set(
 	warning = FALSE
 )
 pg <- palmerpenguins::penguins
-```
-
-# Zero Variable in R
-
-```{r}
 library(tidyverse)
 library(caret)
 ```
 
-```{r}
-samp <- data.frame(
-  a = sample(10, 100, replace = T),
-  b = seq(1:100),
-  c = rnorm(100),
-  d = rep(1, 100)
-)
-```
+## Long format vs. Wide format
 
-## zero variance 추출
+### Wide -> Long
 
 ```{r}
-caret::nearZeroVar(samp)
-```
-
-## zero variance 열 이름 출력
-
-```{r}
-caret::nearZeroVar(samp, name = T)
-```
-
-## zero variance metrix 출력
-
-```{r}
-caret::nearZeroVar(samp, saveMetrics = T)
-```
-
-# Near Zero Variance 열 제거
-
-```{r}
-samp[, -caret::nearZeroVar(samp)] %>% 
-  head()
+df <- data.frame(
+  col1 = rep(1:5, each=2),
+  col2 = 1:10,
+  col3 = 11:20,
+  col4 = 21:30
+); df
 ```
 
 ```{r}
-samp %>% 
-  summarise(across(everything(), ~ c(mean(.), sd(.)))) %>% 
-  `rownames<-`(c("Mean", "SD"))
+df_mod1 <- reshape2::melt(df, id.vars='col1', 
+                  measure.vars=c('col2', 'col3', 'col4')); df_mod
+```
+
+```{r}
+df_mod2 <- df %>% 
+  gather("col2", "col3", "col4", key = cols, value = value); df_mod2
+```
+
+```{r}
+df_mod3 <- df %>% 
+  pivot_longer(cols = c("col2", "col3", "col4"), names_to = "cols", values_to = "value") %>% 
+  arrange(cols); df_mod3
+```
+
+# Long -> Wide
+
+```{r}
+df_mod3 %>% spread( key = cols, value = value)
+```
+
+```{r}
+df_mod3 %>%
+  pivot_wider(
+  names_from = cols, values_from = value, names_sep = "")
 ```
 

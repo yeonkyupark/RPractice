@@ -15,22 +15,44 @@ library(tidyverse)
 library(caret)
 ```
 
-## Random numbers following a distribution with an interval in R
+## Long format vs. Wide format
 
-`source` https://stats.stackexchange.com/questions/113230/generate-random-numbers-following-a-distribution-within-an-interval 
+### Wide -> Long
 
 ```{r}
-rtruncnorm <- function(N, mean = 0, sd = 1, a = -Inf, b = Inf) {
-  if (a > b) stop('Error: Truncation range is empty');
-  U <- runif(N, pnorm(a, mean, sd), pnorm(b, mean, sd));
-  qnorm(U, mean, sd); }
-
-hist(rtruncnorm(10000, 100, 10, 80, 120))
+df <- data.frame(
+  col1 = rep(1:5, each=2),
+  col2 = 1:10,
+  col3 = 11:20,
+  col4 = 21:30
+); df
 ```
 
 ```{r}
-library(msm)
-hist(rtnorm(10000, 100, 10, lower=80, upper=120))
+df_mod1 <- reshape2::melt(df, id.vars='col1', 
+                  measure.vars=c('col2', 'col3', 'col4')); df_mod
 ```
 
+```{r}
+df_mod2 <- df %>% 
+  gather("col2", "col3", "col4", key = cols, value = value); df_mod2
+```
+
+```{r}
+df_mod3 <- df %>% 
+  pivot_longer(cols = c("col2", "col3", "col4"), names_to = "cols", values_to = "value") %>% 
+  arrange(cols); df_mod3
+```
+
+# Long -> Wide
+
+```{r}
+df_mod3 %>% spread( key = cols, value = value)
+```
+
+```{r}
+df_mod3 %>%
+  pivot_wider(
+  names_from = cols, values_from = value, names_sep = "")
+```
 

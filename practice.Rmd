@@ -15,54 +15,91 @@ library(tidyverse)
 library(caret)
 ```
 
-## Long format vs. Wide format
-
-### Wide -> Long
+## plots in ggplot2
 
 ```{r}
 df <- data.frame(
-  col1 = rep(1:5, each=2),
-  col2 = 1:10,
-  col3 = 11:20,
-  col4 = 21:30
+  group = rep(LETTERS[1:4], each=25),
+  var1 = rnorm(100, 100, 5),
+  var2 = rnorm(100, 100, 10),
+  var3 = rnorm(100, 100, 15)
 ); df
 ```
 
-```{r}
-df_mod1 <- reshape2::melt(df, id.vars='col1', 
-                  measure.vars=c('col2', 'col3', 'col4')); df_mod1
-```
+### geom_boxplot
 
 ```{r}
-df_mod2 <- df %>% 
-  gather("col2", "col3", "col4", key = cols, value = value); df_mod2
+p1 <- df %>% ggplot() +
+  geom_boxplot(aes(x = var1))
+p2 <- df %>% ggplot() +
+  geom_boxplot(aes(y = var1))
+gridExtra::grid.arrange(p1, p2, nrow = 1)
 ```
 
 ```{r}
-df_mod3 <- df %>% 
-  pivot_longer(cols = c("col2", "col3", "col4"), names_to = "cols", values_to = "value") %>% 
-  arrange(cols); df_mod3
+df %>% 
+  pivot_longer(cols = c(var1, var2, var3), names_to = "cols", values_to = "value") %>% 
+  ggplot(aes(y = value, fill = cols)) +
+  geom_boxplot()
 ```
 
-# Long -> Wide
-col1
-variable
-value
+### geom_histogram
 
 ```{r}
-reshape2::dcast(data = df_mod1, formula = col1 ~ variable, sum, value.var = "value")
+p1 <- df %>% 
+  ggplot(aes(x = var1)) +
+  geom_histogram(bins = 10)
+p2 <- df %>% 
+  ggplot(aes(y = var1)) +
+  geom_histogram(bins = 30)
+gridExtra::grid.arrange(p1, p2, nrow = 2)
 ```
-
-
-```{r eval=FALSE}
-df_mod3 %>% spread( key = cols, value = value)
-```
-
-`spread()`는 데이터 중복으로 인해 error 발생
 
 ```{r}
-df_mod3 %>% 
-  pivot_wider(names_from = cols, values_from = value, values_fn = list) %>% 
-  unnest(cols = everything())
+p1 <- df %>% 
+  pivot_longer(cols = c(var1, var2, var3), names_to = "cols", values_to = "value") %>% 
+  ggplot(aes(x = value, fill = cols)) +
+  geom_histogram(alpha = 0.5)
+p2 <- df %>% 
+  pivot_longer(cols = c(var1, var2, var3), names_to = "cols", values_to = "value") %>% 
+  ggplot(aes(x = value, fill = cols)) +
+  geom_histogram(alpha = 0.5, position = "identity")
+gridExtra::grid.arrange(p1, p2, nrow = 2)
 ```
+
+### geom_point
+
+```{r}
+p1 <- df %>% 
+  ggplot(aes(x = var1, y = var2)) +
+  geom_point(aes(col = group))
+p2 <- df %>% 
+  ggplot(aes(x = var1, y = var3)) +
+  geom_point(aes(col = group))
+gridExtra::grid.arrange(p1, p2, nrow = 2)
+```
+
+```{r}
+df %>% 
+  pivot_longer(cols = c(var2, var3), names_to = "cols", values_to = "value") %>% 
+  ggplot(aes(x = var1, y = value)) +
+  geom_point(aes(col = cols), alpha = 0.5) +
+  geom_smooth()
+```
+### geom_line
+
+```{r}
+p1 <- df %>% 
+  mutate(var4 = var1+var2+var3) %>% 
+  ggplot(aes(x = var1, y = var4)) +
+  geom_line()
+p2 <- df %>% 
+  mutate(var4 = var1+var2+var3) %>% 
+  ggplot(aes(x = var1, y = var4)) +
+  geom_line(aes(col = group))
+gridExtra::grid.arrange(p1, p2, nrow = 2)
+```
+
+
+
 

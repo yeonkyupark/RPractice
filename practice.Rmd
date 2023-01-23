@@ -15,7 +15,7 @@ library(tidyverse)
 library(caret)
 ```
 
-## plots in ggplot2
+## outlier detection in R
 
 ```{r}
 df <- data.frame(
@@ -26,80 +26,29 @@ df <- data.frame(
 ); df %>% head
 ```
 
-### geom_boxplot
-
-```{r}
-p1 <- df %>% ggplot() +
-  geom_boxplot(aes(x = var1))
-p2 <- df %>% ggplot() +
-  geom_boxplot(aes(y = var1))
-gridExtra::grid.arrange(p1, p2, nrow = 1)
-```
+### function to check outlier
 
 ```{r}
 df %>% 
-  pivot_longer(cols = c(var1, var2, var3), names_to = "cols", values_to = "value") %>% 
-  ggplot(aes(y = value, fill = cols)) +
+  gather(key = group, value = value) %>% 
+  ggplot(aes(group, value)) +
   geom_boxplot()
 ```
 
-### geom_histogram
 
 ```{r}
-p1 <- df %>% 
-  ggplot(aes(x = var1)) +
-  geom_histogram(bins = 10)
-p2 <- df %>% 
-  ggplot(aes(y = var1)) +
-  geom_histogram(bins = 30)
-gridExtra::grid.arrange(p1, p2, nrow = 2)
-```
-
-```{r}
-p1 <- df %>% 
-  pivot_longer(cols = c(var1, var2, var3), names_to = "cols", values_to = "value") %>% 
-  ggplot(aes(x = value, fill = cols)) +
-  geom_histogram(alpha = 0.5)
-p2 <- df %>% 
-  pivot_longer(cols = c(var1, var2, var3), names_to = "cols", values_to = "value") %>% 
-  ggplot(aes(x = value, fill = cols)) +
-  geom_histogram(alpha = 0.5, position = "identity")
-gridExtra::grid.arrange(p1, p2, nrow = 2)
-```
-
-### geom_point
-
-```{r}
-p1 <- df %>% 
-  ggplot(aes(x = var1, y = var2)) +
-  geom_point(aes(col = group))
-p2 <- df %>% 
-  ggplot(aes(x = var1, y = var3)) +
-  geom_point(aes(col = group))
-gridExtra::grid.arrange(p1, p2, nrow = 2)
+is.outlier <- function(x) {
+  x < quantile(x, 0.25, na.rm = T) - 1*IQR(x, na.rm = T) |
+  x > quantile(x, 0.75, na.rm = T) + 1*IQR(x, na.rm = T) 
+}
 ```
 
 ```{r}
 df %>% 
-  pivot_longer(cols = c(var2, var3), names_to = "cols", values_to = "value") %>% 
-  ggplot(aes(x = var1, y = value)) +
-  geom_point(aes(col = cols), alpha = 0.5) +
-  geom_smooth()
+  gather(key = group, value = value) %>% 
+  group_by(group) %>% 
+  mutate(is_outlier = is.outlier(value)) %>% 
+  filter(is_outlier == T)
+  
 ```
-### geom_line
-
-```{r}
-p1 <- df %>% 
-  mutate(var4 = var1+var2+var3) %>% 
-  ggplot(aes(x = var1, y = var4)) +
-  geom_line()
-p2 <- df %>% 
-  mutate(var4 = var1+var2+var3) %>% 
-  ggplot(aes(x = var1, y = var4)) +
-  geom_line(aes(col = group))
-gridExtra::grid.arrange(p1, p2, nrow = 2)
-```
-
-
-
 

@@ -52,3 +52,24 @@ df %>%
   
 ```
 
+```{r}
+airquality %>% 
+  pivot_longer(everything(), names_to = "key")
+```
+
+```{r}
+ggplot2::diamonds %>%      
+  mutate(across(.fns = as.character)) %>%     
+  pivot_longer(everything(), names_to = "key") %>%     
+  arrange(match(key, unique(key))) 
+```
+
+
+
+
+
+
+
+
+
+

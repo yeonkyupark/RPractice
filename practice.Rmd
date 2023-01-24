@@ -15,55 +15,81 @@ library(tidyverse)
 library(caret)
 ```
 
-## Correlation coefficient in R
+## dummy variables in R
 
-### cor
+### ifelse
 
 ```{r}
-cor_body <- pg %>% 
-  drop_na() %>% 
-  group_by(species) %>% 
-  summarise(across(.cols = bill_length_mm:flipper_length_mm, ~cor(., body_mass_g)))
-cor_body
+set.seed(123)
+pg %>% 
+  mutate(dummy_sex = ifelse(sex == "female", 0, 1)) %>% 
+  select(sex, dummy_sex) %>%
+  sample_n(6, replace = F)
 ```
 
 ```{r}
-cor_max <- cor_body %>% 
-  summarise(across(.cols = bill_length_mm:flipper_length_mm, ~max(.))) %>% 
-  summarise(.[which.max(.)])
-cor_max
+set.seed(123)
+pg %>% 
+  mutate(dummy_Chinstrap = ifelse(species == "Chinstrap", 1, 0),
+         dummy_Gentoo = ifelse(species == "Gentoo", 1, 0)) %>% 
+  select(species, starts_with("dummy_")) %>%
+  sample_n(6, replace = F)
+```
+
+### model.matrix
+
+```{r}
+set.seed(123)
+pg %>% 
+  model.matrix( ~ species + sex, data = ., ) %>% .[, -1] %>% 
+  bind_cols(na.omit(pg)) %>% 
+  sample_n(6, replace = F)
+```
+
+
+### fastDummies::dummy_cols
+
+```{r}
+library(fastDummies)
+# n category, n dummies
+set.seed(123)
+pg %>% drop_na() %>% # na omit
+  dummy_cols(select_columns = c("species", "sex")) %>% 
+  select(starts_with("species"), starts_with("sex")) %>% 
+  sample_n(6, replace = F)
+```
+
+```{r}
+# n category, (n-1) dummies
+set.seed(123)
+pg %>% drop_na() %>% # na omit
+  dummy_cols(select_columns = c("species", "sex"),
+             remove_first_dummy = T) %>% 
+  select(starts_with("species"), starts_with("sex")) %>% 
+  sample_n(6, replace = F)
 ```
 
 
 ```{r}
-cor_body %>% 
-  filter_all(any_vars(. %in% c(cor_max$bill_depth_mm)))
+# n category, (n-1) dummies, remove original variable
+set.seed(123)
+pg %>% drop_na() %>% # na omit
+  dummy_cols(select_columns = c("species", "sex"), 
+             remove_first_dummy = T,
+             remove_selected_columns = T) %>% 
+  select(starts_with("species"), starts_with("sex")) %>% 
+  sample_n(6, replace = F)
 ```
 
+### caret::dummyVars
 
 ```{r}
-cor_body %>% 
-  filter(across(.cols = everything(),
-                .fns = ~(.x %in% c(cor_max$bill_depth_mm))))
-```
-
-※ filter(), We cannot directly use across() in filter() because we need an extra step to combine the results. ...  
-
-* https://dplyr.tidyverse.org/articles/colwise.html#filter
-* https://community.rstudio.com/t/using-filter-with-across-to-keep-all-rows-of-a-data-frame-that-include-a-missing-value-for-any-variable/68442 
-
-```{r}
-rowAny <- function(x) rowSums(x) > 0
-cor_body %>% 
-  filter(
-    rowAny(
-      across(.cols = everything(),
-             .fns = ~(.x %in% c(cor_max$bill_depth_mm))))
-  )
-```
-
-```{r}
-cor_body %>% 
-  filter(if_any(.cols = 2:4, ~(. %in% c(cor_max$bill_depth_mm))))
+library(caret)
+set.seed(123)
+pg %>% 
+  dummyVars(~ species + sex, data = ., sep = "_", fullRank = T) %>% 
+  predict(newdata = pg) %>% 
+  bind_cols(pg) %>% 
+  sample_n(6, replace = F)
 ```
 

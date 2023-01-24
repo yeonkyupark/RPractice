@@ -15,61 +15,27 @@ library(tidyverse)
 library(caret)
 ```
 
-## outlier detection in R
+## contingency table in R
+
+### manually
 
 ```{r}
-df <- data.frame(
-  group = rep(LETTERS[1:4], each=25),
-  var1 = rnorm(100, 100, 5),
-  var2 = rnorm(100, 100, 10),
-  var3 = rnorm(100, 100, 15)
-); df %>% head
+pg %>% 
+  drop_na() %>% 
+  group_by(species, sex) %>% 
+  tally () %>% 
+  pivot_wider(names_from = sex, values_from = n) %>% 
+  mutate(female_freq = round(female/(female+male),2),
+         male_freq = 1 - female_freq)
 ```
 
-### function to check outlier
+### rstatix
 
 ```{r}
-df %>% 
-  gather(key = group, value = value) %>% 
-  ggplot(aes(group, value)) +
-  geom_boxplot()
+pg %>% 
+  drop_na() %>% 
+  rstatix::freq_table(species, sex) %>% 
+  pivot_wider(names_from = sex, values_from = c(n, prop))
 ```
-
-
-```{r}
-is.outlier <- function(x) {
-  x < quantile(x, 0.25, na.rm = T) - 1*IQR(x, na.rm = T) |
-  x > quantile(x, 0.75, na.rm = T) + 1*IQR(x, na.rm = T) 
-}
-```
-
-```{r}
-df %>% 
-  gather(key = group, value = value) %>% 
-  group_by(group) %>% 
-  mutate(is_outlier = is.outlier(value)) %>% 
-  filter(is_outlier == T)
-  
-```
-
-```{r}
-airquality %>% 
-  pivot_longer(everything(), names_to = "key")
-```
-
-```{r}
-ggplot2::diamonds %>%      
-  mutate(across(.fns = as.character)) %>%     
-  pivot_longer(everything(), names_to = "key") %>%     
-  arrange(match(key, unique(key))) 
-```
-
-
-
-
-
-
-
-
 
 

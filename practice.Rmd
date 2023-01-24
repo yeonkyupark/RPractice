@@ -41,7 +41,7 @@ pg %>%
 ```{r}
 set.seed(123)
 pg %>% 
-  model.matrix( ~ species + sex, data = ., ) %>% .[, -1] %>% 
+  model.matrix( ~ species + sex, data = .) %>% .[, -1] %>% 
   bind_cols(na.omit(pg)) %>% 
   sample_n(6, replace = F)
 ```
@@ -91,5 +91,23 @@ pg %>%
   predict(newdata = pg) %>% 
   bind_cols(pg) %>% 
   sample_n(6, replace = F)
+```
+
+### sjmise::to_dummy
+
+```{r}
+library(sjmisc)
+pg %>% 
+  to_dummy(species, sex, suffix = c("label")) %>% 
+  head
+```
+
+### modeldb::add_dummy_variables
+
+```{r}
+library(modeldb)
+pg %>% 
+  add_dummy_variables(x = species, values = ("Gentoo"), remove_original = F, auto_values = T) %>% 
+  head
 ```
 

@@ -15,99 +15,70 @@ library(tidyverse)
 library(caret)
 ```
 
-## dummy variables in R
+## binning in R
 
-### ifelse
+### cut
 
 ```{r}
-set.seed(123)
+range(pg$body_mass_g, na.rm=T)
+```
+
+
+```{r}
 pg %>% 
-  mutate(dummy_sex = ifelse(sex == "female", 0, 1)) %>% 
-  select(sex, dummy_sex) %>%
-  sample_n(6, replace = F)
+  mutate(body_bin = cut(body_mass_g, breaks = c(seq(2500, 6500, 500)), dig.lab = 4)) %>% 
+  group_by(body_bin) %>% 
+  tally() # summarise(n = n())
 ```
 
+### utile
+
 ```{r}
-set.seed(123)
 pg %>% 
-  mutate(dummy_Chinstrap = ifelse(species == "Chinstrap", 1, 0),
-         dummy_Gentoo = ifelse(species == "Gentoo", 1, 0)) %>% 
-  select(species, starts_with("dummy_")) %>%
-  sample_n(6, replace = F)
+  mutate(body_bin = ntile(body_mass_g, n = 5)) %>% 
+  group_by(body_bin) %>% 
+  tally()
 ```
 
-### model.matrix
+### dlookr::binning
 
 ```{r}
-set.seed(123)
+library(dlookr)
 pg %>% 
-  model.matrix( ~ species + sex, data = .) %>% .[, -1] %>% 
-  bind_cols(na.omit(pg)) %>% 
-  sample_n(6, replace = F)
-```
-
-
-### fastDummies::dummy_cols
-
-```{r}
-library(fastDummies)
-# n category, n dummies
-set.seed(123)
-pg %>% drop_na() %>% # na omit
-  dummy_cols(select_columns = c("species", "sex")) %>% 
-  select(starts_with("species"), starts_with("sex")) %>% 
-  sample_n(6, replace = F)
+  binning(pg$body_mass_g)
 ```
 
 ```{r}
-# n category, (n-1) dummies
-set.seed(123)
-pg %>% drop_na() %>% # na omit
-  dummy_cols(select_columns = c("species", "sex"),
-             remove_first_dummy = T) %>% 
-  select(starts_with("species"), starts_with("sex")) %>% 
-  sample_n(6, replace = F)
+binning(pg$body_mass_g, type = "equal")
 ```
 
-
 ```{r}
-# n category, (n-1) dummies, remove original variable
-set.seed(123)
-pg %>% drop_na() %>% # na omit
-  dummy_cols(select_columns = c("species", "sex"), 
-             remove_first_dummy = T,
-             remove_selected_columns = T) %>% 
-  select(starts_with("species"), starts_with("sex")) %>% 
-  sample_n(6, replace = F)
+binning(pg$body_mass_g, type = "pretty")
 ```
 
-### caret::dummyVars
-
 ```{r}
-library(caret)
-set.seed(123)
 pg %>% 
-  dummyVars(~ species + sex, data = ., sep = "_", fullRank = T) %>% 
-  predict(newdata = pg) %>% 
-  bind_cols(pg) %>% 
-  sample_n(6, replace = F)
+  mutate(body_bin = binning(pg$body_mass_g, type = "pretty") %>%  extract()) %>% 
+  group_by(species, body_bin) %>% 
+  summarise(freq = n())
 ```
-
-### sjmise::to_dummy
 
 ```{r}
-library(sjmisc)
 pg %>% 
-  to_dummy(species, sex, suffix = c("label")) %>% 
-  head
+  mutate(body_bin = binning(pg$body_mass_g, 
+                            type = "pretty", 
+                            nbin = 5, 
+                            labels = c("2K", "3K", "4K", "5K", "6K"))) %>% 
+  group_by(species, body_bin) %>% 
+  summarise(freq = n())
 ```
-
-### modeldb::add_dummy_variables
 
 ```{r}
-library(modeldb)
-pg %>% 
-  add_dummy_variables(x = species, values = ("Gentoo"), remove_original = F, auto_values = T) %>% 
-  head
+table(cut(pg$body_mass_g, 
+    breaks = quantile(pg$body_mass_g, na.rm = T), 
+    labels = c("Q1", "Q2", "Q3", "Q4")))
 ```
+
+
+
 

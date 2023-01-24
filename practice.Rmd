@@ -48,6 +48,7 @@ cor_body %>%
 ```
 
 ※ filter(), We cannot directly use across() in filter() because we need an extra step to combine the results. ...  
+
 * https://dplyr.tidyverse.org/articles/colwise.html#filter
 * https://community.rstudio.com/t/using-filter-with-across-to-keep-all-rows-of-a-data-frame-that-include-a-missing-value-for-any-variable/68442 
 

@@ -51,7 +51,7 @@ pg %>%
 ```
 
 
-### Comparasion
+### Comparision
 
 ```{r}
 samp1_1 <- c(1:10); sd(samp1_1)

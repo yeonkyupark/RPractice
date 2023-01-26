@@ -1,5 +1,5 @@
 ---
-title: "VIF in R"
+title: "Feature Importance in R"
 output: html_document
 date: "`r Sys.Date()`"
 ---
@@ -15,27 +15,22 @@ library(tidyverse)
 library(caret)
 ```
 
-## VIF (Variance Inflation Factor)
-
-$$
-VIF = \frac {1}{1-R^2}
-$$
-
-### car::vif
+## Feature Importance in R
 
 ```{r}
-model <- lm(mpg ~ disp + hp + wt + drat, data = mtcars)
+library(mlbench)
+library(rpart)
+library(caret)
+data(BreastCancer)
 ```
 
 ```{r}
-summary(model)
+BC.dt <- rpart(Class ~ ., data = BreastCancer, )
+BC.dt.imp <- varImp(BC.dt)
 ```
 
 ```{r}
-vif
+BC.dt.imp
 ```
 
-```{r}
-1/(1-0.8376)
-```
 

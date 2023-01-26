@@ -1,0 +1,41 @@
+---
+title: "VIF in R"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+library(caret)
+```
+
+## VIF (Variance Inflation Factor)
+
+$$
+VIF = \frac {1}{1-R^2}
+$$
+
+### car::vif
+
+```{r}
+model <- lm(mpg ~ disp + hp + wt + drat, data = mtcars)
+```
+
+```{r}
+summary(model)
+```
+
+```{r}
+vif
+```
+
+```{r}
+1/(1-0.8376)
+```
+

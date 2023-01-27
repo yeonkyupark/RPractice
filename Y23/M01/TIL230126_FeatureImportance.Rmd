@@ -12,25 +12,28 @@ knitr::opts_chunk$set(
 )
 pg <- palmerpenguins::penguins
 library(tidyverse)
-library(caret)
 ```
 
 ## Feature Importance in R
 
 ```{r}
 library(mlbench)
-library(rpart)
-library(caret)
 data(BreastCancer)
+BC <- BreastCancer
+
 ```
 
 ```{r}
-BC.dt <- rpart(Class ~ ., data = BreastCancer, )
-BC.dt.imp <- varImp(BC.dt)
+BC <- na.omit(BC)
+BC.rf <- randomForest::randomForest(Class ~ ., data = BC, importance=TRUE)
 ```
 
 ```{r}
-BC.dt.imp
+BC.rf$importance
+```
+
+```{r}
+randomForest::varImpPlot(BC.rf, main = "Title: Feature Importance of BreastCancer")
 ```
 
 

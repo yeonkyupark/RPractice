@@ -16,3 +16,25 @@ library(tidyverse)
 
 ## Quantile-Quantile Plots & Skewness
 
+```{r}
+df <- rbeta(10000,5,2)
+hist(df, main = "Left skewed")
+boxplot(df)
+qqnorm(df); qqline(df, col="blue", lwd = 2, lty = 2)
+```
+
+
+```{r}
+df <- rbeta(10000,2,5)
+hist(df, main = "Right skewed")
+boxplot(df)
+qqnorm(df); qqline(df, col="blue", lwd = 2, lty = 2)
+```
+
+
+```{r}
+df <- rbeta(10000,5,5)
+hist(df, main = "Normal distribution")
+boxplot(df)
+qqnorm(df); qqline(df, col="blue", lwd = 2, lty = 2)
+```

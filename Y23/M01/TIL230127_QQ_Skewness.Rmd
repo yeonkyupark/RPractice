@@ -1,0 +1,18 @@
+---
+title: "Quantile-Quantile Plots & Skewness"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## Quantile-Quantile Plots & Skewness
+

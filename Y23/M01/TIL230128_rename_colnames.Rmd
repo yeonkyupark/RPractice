@@ -1,0 +1,51 @@
+---
+title: "Rename column name in R"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## Rename column name in R
+
+### with base
+
+```{r}
+colnames(pg)
+```
+
+```{r}
+pg_new <- pg
+colnames(pg_new) <- paste("penguins", colnames(pg_new), sep = "_")
+colnames(pg_new)
+```
+
+### with dplyr
+
+```{r}
+pg %>% 
+  rename_with( ~ paste0("penguins_", .x)) %>% 
+  colnames()
+```
+
+```{r}
+pg %>% 
+  rename_with( ~ paste("penguins", .x, sep = "_")) %>% 
+  colnames()
+```
+
+```{r}
+pg %>% 
+  rename_with( ~ paste0(.x, "_penguins")) %>% # suffix
+  colnames()
+```
+
+

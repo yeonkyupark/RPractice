@@ -1,0 +1,77 @@
+---
+title: "Normalization vs Standardization"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## Normalization vs Standardization
+
+```{r}
+pg_numeric <- pg %>% 
+  mutate(year = as.factor(year)) %>% 
+  select(where(is.numeric))
+```
+
+### Normalization with caret
+
+```{r}
+normalized <- caret::preProcess(pg_numeric, method = c("range"))
+normalized
+```
+
+```{r}
+pg_numeric_normalized <- predict(normalized, pg_numeric)
+pg_numeric_normalized %>% head
+```
+
+```{r}
+pg_numeric_normalized %>% 
+  summarise(across(everything(), ~range(., na.rm = T)))
+```
+
+```{r}
+pg_numeric_normalized %>% 
+  pivot_longer(everything(), names_to = "cols", values_to = "normalized", values_drop_na = TRUE) %>% 
+  ggplot(aes(x = cols, y = normalized)) + 
+  geom_boxplot() +
+  geom_hline(yintercept = c(0,1), col = "blue", lty = 2)
+```
+
+### Standardization with caret
+
+```{r}
+standardize <- caret::preProcess(pg_numeric, method = c("center", "scale"))
+standardize
+```
+
+```{r}
+pg_numeric_standardized <- predict(standardize, pg_numeric)
+pg_numeric_standardized %>% head
+```
+
+```{r}
+pg_numeric_standardized %>% 
+  summarise(across(everything(), ~range(., na.rm = T)))
+```
+
+```{r}
+gg_pg <- pg_numeric_standardized %>% 
+  pivot_longer(everything(), names_to = "cols", values_to = "standardized", values_drop_na = TRUE) %>% 
+  mutate(SD = sd(standardized, na.rm = T))
+gg_pg %>% 
+  ggplot(aes(x = cols, y = standardized)) + 
+  geom_boxplot()
+```
+
+.EOF.
+

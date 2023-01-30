@@ -1,5 +1,5 @@
 ---
-title: "ggplot in R"
+title: "dplyr and ggplot in R"
 output: html_document
 date: "`r Sys.Date()`"
 ---
@@ -14,7 +14,7 @@ pg <- palmerpenguins::penguins
 library(tidyverse)
 ```
 
-## ggplot in R
+## dplyr and ggplot in R
 
 ```{r}
 pg %>% na.omit() %>% 
@@ -50,7 +50,5 @@ pg %>%
                axis.text.x = element_text(angle=30, hjust=1),
         legend.position = "bottom")
 ```
-
-
 
 .EOF.

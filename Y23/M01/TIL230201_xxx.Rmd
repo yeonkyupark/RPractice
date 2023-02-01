@@ -1,0 +1,19 @@
+---
+title: "2월 01일"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "",
+	collapse = T
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## ////

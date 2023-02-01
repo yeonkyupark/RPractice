@@ -1,0 +1,24 @@
+---
+title: "dupulicate keys in R"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "",
+	collapse = T
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## duplicate keys in R
+
+```{r}
+plot(pg$body_mass_g)
+```
+

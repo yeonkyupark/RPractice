@@ -27,7 +27,7 @@ Addins -> "Paste as ... "
 
 ### rstudio to excel
 
-```{r}
+```
 pg_outlier <- pg %>% 
   select(species, body_mass_g) %>% 
   filter(body_mass_g > quantile(body_mass_g, .75, na.rm = T) + 

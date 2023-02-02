@@ -1,0 +1,64 @@
+---
+title: "NA in tidyr"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "",
+	collapse = T
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## NA in tidyr
+
+```{r}
+colSums(is.na(pg))
+```
+
+
+### drop_na
+
+```{r}
+pg_drop_na <- pg %>% drop_na
+pg_drop_na_base <- pg[complete.cases(pg), ]
+head(pg_drop_na == pg_drop_na_base)
+```
+
+```{r}
+colSums((pg_drop_na == pg_drop_na_base) == TRUE)
+```
+
+```{r}
+colSums((pg_drop_na == pg_drop_na_base) == FALSE)
+```
+
+### fill
+
+```{r}
+pg %>% 
+  fill(everything(), .direction = "updown") %>% 
+  summarise(across(everything(), ~sum(is.na(.))))
+```
+
+### replace_na
+
+```{r}
+pg %>% 
+  mutate(across(where(is.numeric), ~as.numeric(.))) %>% 
+  mutate(across(where(is.numeric), ~replace_na(., mean(., na.rm = T)))) %>% 
+  mutate(across(where(is.factor), ~replace_na(., rstatix::get_mode(.)))) %>% 
+  filter(!complete.cases(pg))
+```
+
+```{r}
+pg[!complete.cases(pg), ]
+```
+
+.EOF.

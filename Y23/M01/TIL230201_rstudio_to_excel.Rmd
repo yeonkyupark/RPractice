@@ -1,5 +1,5 @@
 ---
-title: "rstudio to excel"
+title: "rstudio ↔ excel"
 output: html_document
 date: "`r Sys.Date()`"
 ---
@@ -16,7 +16,16 @@ pg <- palmerpenguins::penguins
 library(tidyverse)
 ```
 
-## rstudio to excel in R
+## rstudio ↔ excel in R
+
+### excel to rstudio
+
+```
+install.packages("datapasta")
+Addins -> "Paste as ... "
+```
+
+### rstudio to excel
 
 ```{r}
 pg_outlier <- pg %>% 

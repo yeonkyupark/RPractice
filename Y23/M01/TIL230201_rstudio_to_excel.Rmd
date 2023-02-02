@@ -35,10 +35,12 @@ pg_outlier <- pg %>%
 clipr::write_clip(pg_outlier)
 ```
 
+```
 species	body_mass_g
 Gentoo	6300
 Gentoo	6050
 Gentoo	6000
 Gentoo	6000
+```
 
 .EOF.

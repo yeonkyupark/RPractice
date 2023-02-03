@@ -1,0 +1,47 @@
+---
+title: "점들간의 거리 계산"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "##",
+	collapse = T
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## 점들간의 거리 계산
+
+```{r}
+P1 <- c(1,2,3)
+P2 <- c(3,5,2)
+P3 <- c(5,5,4)
+P4 <- c(1,4,7)
+P5 <- c(2,2,4)
+```
+
+```{r}
+df <- t(data.frame(
+  P1, P2, P3, P4, P5
+))
+```
+
+```{r}
+df_dist <- dist(df)
+```
+
+```{r}
+min(df_dist)
+```
+
+```{r}
+mat_dist <- as.matrix(df_dist)
+which(mat_dist == min(df_dist), arr.ind = T)
+```
+

@@ -1,0 +1,58 @@
+---
+title: "apply in r"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "#",
+	collapse = T
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## apply in r
+
+```{r}
+mat1 <- matrix(1:12, nrow = 3)
+mat1
+```
+
+```{r}
+apply(X = mat1, MARGIN = 1, FUN = max)
+```
+
+```{r}
+c( max(mat1[1, ]), max(mat1[2, ]), max(mat1[3, ]) )
+```
+
+```{r}
+apply(X = mat1, MARGIN = 2, FUN = max)
+```
+
+```{r}
+c( max(mat1[, 1]), max(mat1[, 2]), max(mat1[, 3]), max(mat1[, 4]) )
+```
+
+```{r}
+udf_add_n <- function(x, n = 0) {
+  x + n
+}
+```
+
+```{r}
+apply(mat1, 1, udf_add_n, 3)
+```
+```{r}
+arr1 <- array(1:24, dim = c(3,4,2))
+apply(arr1, 1, max)
+apply(arr1, 2, max)
+apply(arr1, 3, max)
+```
+
+.EOF.

@@ -1,0 +1,38 @@
+---
+title: "tapply vs. aggregate in r"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "##",
+	collapse = T
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## tapply vs. aggregate in r
+
+```{r}
+aggregate(bill_depth_mm ~ species + island,
+          data = pg, mean)
+```
+
+```{r}
+tapply(pg$bill_depth_mm,
+       list(pg$species, pg$island),
+       mean, na.rm = T)
+```
+
+```{r}
+aggregate(bill_depth_mm ~ species + island,
+          data = pg, mean) %>% 
+  pivot_wider(names_from = island,
+    values_from = bill_depth_mm )
+```
+

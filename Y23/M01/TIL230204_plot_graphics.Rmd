@@ -1,0 +1,133 @@
+---
+title: "plot of graphics package in r"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "#",
+	collapse = T
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## plot of graphics package in r
+
+```{r}
+plot(0,0)
+```
+
+```{r}
+plot(0,0,
+     type = "n")
+```
+
+```{r}
+plot(0,0,
+     type = "n",
+     xlim = c(0, 20), ylim = c(0, 10))
+```
+
+```{r}
+plot(0,0,
+     type = "n",
+     xlim = c(0, 20), ylim = c(0, 10),
+     main = "Blank plot", xlab = "X Axis", ylab = "Y Axis")
+```
+
+```{r}
+plot(0,0,
+     type = "n",
+     xlim = c(0, 20), ylim = c(0, 10),
+     main = "Blank plot", xlab = "X Axis", ylab = "Y Axis")
+points(x = c(3,5,7,11,13,17),
+       y = c(1:6), 
+       pch = 19)
+abline(v = 0, h = 0, lty = 1)
+abline(a = 0, b = .4, lty = 2, col = "blue")
+```
+
+```{r}
+plot(pg$bill_length_mm, pg$bill_depth_mm,
+     xlim = range(pg$bill_length_mm, na.rm = T), 
+     ylim = range(pg$bill_depth_mm, na.rm = T),
+     main = "펭귄 종별 부리 깊이와 길이", 
+     xlab = "부리 길이", ylab = "부리 깊이",
+     pch = 19,
+     col = c("red", "green", "blue")[pg$species])
+```
+```{r}
+with(pg,
+  plot(bill_length_mm, bill_depth_mm,
+     xlim = range(bill_length_mm, na.rm = T), 
+     ylim = range(bill_depth_mm, na.rm = T),
+     main = "펭귄 종별 부리 깊이와 길이", 
+     xlab = "부리 길이", ylab = "부리 깊이",
+     pch = c(17:19)[species],
+     col = c("red", "green", "blue")[species],
+     cex.main = 1.5, cex.axis = .75)
+)
+```
+
+```{r}
+with(pg,
+  plot(bill_length_mm, bill_depth_mm,
+     xlim = range(bill_length_mm, na.rm = T), 
+     ylim = range(bill_depth_mm, na.rm = T),
+     main = "펭귄 종별 부리 깊이와 길이", 
+     xlab = "부리 길이", ylab = "부리 깊이",
+     pch = c(17:19)[species],
+     col = c("red", "green", "blue")[species],
+     cex.main = 1.5, cex.axis = .75)
+)
+
+legend(55, 15, 
+       legend = c("Adelie", "Chinstrap", "Gentoo"),
+       col = c("red", "green", "blue"),
+       pch = 17:19,
+       bty = "n"
+)
+
+text(58, 21.5, labels = c("※ Dataset: penguins"), cex = .7)
+```
+
+```{r}
+mean_points <- aggregate(
+  cbind(x = bill_length_mm, y = bill_depth_mm) ~ species,
+  data = pg, 
+  mean
+)
+
+{
+  with(pg,
+    plot(bill_length_mm, bill_depth_mm,
+       xlim = range(bill_length_mm, na.rm = T), 
+       ylim = range(bill_depth_mm, na.rm = T),
+       main = "펭귄 종별 부리 깊이와 길이", 
+       xlab = "부리 길이", ylab = "부리 깊이",
+       pch = c(17:19)[species],
+       col = c("#99FFFF", "#FF99FF", "#FFFF99")[species],
+       cex.main = 1.5, cex.axis = .75)
+  )
+  
+  legend(55, 15, 
+         legend = c("Adelie", "Chinstrap", "Gentoo"),
+         col = c("#99FFFF", "#FF99FF", "#FFFF99"),
+         pch = 17:19,
+         bty = "n"
+  )
+  
+  text(58, 21.5, labels = c("※ Dataset: penguins"), cex = .7)
+  
+  text(mean_points$x, mean_points$y, "*", cex = 2, col = "black")
+  text(mean_points$x, mean_points$y, mean_points$species, 
+       adj = c(0.1, 1.5), col = "black")
+}
+```
+
+.EOF.

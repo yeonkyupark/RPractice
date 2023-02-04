@@ -1,0 +1,55 @@
+---
+title: "엑셀 범위 넘는 파일 만들기"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "##",
+	collapse = T
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## 엑셀 범위 넘는 파일 만들기
+
+엑셀 최대 셀 수는 아래 문서 참고
+https://support.microsoft.com/ko-kr/office/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%AA%A8%EB%8D%B8-%EC%82%AC%EC%96%91-%EB%B0%8F-%EC%A0%9C%ED%95%9C-19aa79f8-e6e8-45a8-9be2-b58778fd68ef
+
+엑셀의 최대 행과 열의 개수는 1,048,576 * 16,384.
+
+```{r}
+xls_max_row <- 1048576
+xls_max_col <- 16384
+df <- data.frame(
+  x = rep(0, xls_max_row+1)
+)
+dim(df)
+```
+
+```{r}
+head(df)
+```
+
+```r
+> writexl::write_xlsx(df, "overflow_xls.xlsx")
+Error: Error in libxlsxwriter: 'Worksheet row or column index out of range.'
+```
+
+```{r}
+write.csv(df, "overflow_xls.csv")
+```
+
+```{r}
+file.info("overflow_xls.csv")
+```
+
+
+
+
+

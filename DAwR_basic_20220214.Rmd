@@ -1,0 +1,1249 @@
+---
+title: "데이터분석 R고하자"
+auther: "박연규 / Test Solution 그룹"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+	eval = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+# 개발환경
+
+## R 설치
+
+## Rtools 설치
+
+## RStudio 설치
+
+------------------------------------------------------------------------
+
+# 개요
+
+## R이란?
+
+## R vs. Python
+
+## R vs. Excel
+
+------------------------------------------------------------------------
+
+# 입문
+
+## RStudio 환경설정
+
+## R 코드 실행
+
+------------------------------------------------------------------------
+
+# 기초
+
+## 용어정리
+
+## 연산자 (Operator)
+
+## 데이터 타입 (Data Type)
+
+### 논리형 (Logical)
+
+```{r}
+l1 <- TRUE
+l2 <- FALSE
+```
+
+```{r}
+l1 & l2
+l1 | l2
+l1 + l2
+l1 - l2
+l2 - l1
+l1 * l2
+l1 / l2
+l2 / l1
+l1 > l2
+l1 < l2
+l1 ^ l2
+l2 ^ l1
+```
+
+### 숫자형 (Numeric)
+
+```{r}
+n1 <- 1
+n2 <- 2
+d1 <- 1.1
+d2 <- 2.1
+```
+
+#### 정수형 (Integer)
+
+```{r}
+n1 + n2
+n1 - n2
+n1 * n2
+n1 / n2
+n1 > n2
+n1 < n2
+n1 & n2
+n1 | n2
+n1 ^ n2
+```
+
+```{r}
+n11 <- 17
+n22 <- 3
+
+n11 %/% n22
+n11 %% n22
+```
+
+#### 실수형 (Double)
+
+```{r}
+d1 + d2
+d1 - d2
+d1 * d2
+d1 / d2
+d1 > d2
+d1 < d2
+d1 & d2
+d1 | d2
+d1 ^ d2
+```
+
+```{r}
+d11 <- 10.1
+d22 <- 2.3
+
+d11 %/% d22
+d11 %% d22
+```
+
+#### 복소수형 (Complex Number)
+
+```{r}
+cn1 <- 1 + 1i
+cn2 <- 2 - 1i
+```
+
+```{r}
+(1i)^2
+(-1i)^2
+(1+1i)^2
+
+cn1 + cn2
+cn1 - cn2
+```
+
+### 문자형 (Character)
+
+```{r}
+c1 <- "a"
+c2 <- "A"
+```
+
+```{r error=TRUE}
+c1 + c2
+c1 - c2
+c1 * c2
+c1 / c2
+c1 > c2
+c1 < c2
+c1 & c2
+c1 | c2
+c1 ^ c2
+```
+
+### 기타 (other types)
+
+#### NA (Not Available)
+
+```{r error=TRUE}
+not_available <- NA
+not_available
+
+not_available + l1
+not_available + n1
+not_available + d1
+not_available + c1
+
+l1 + not_available
+n1 + not_available
+d1 + not_available
+c1 + not_available
+```
+
+#### NULL (Null)
+
+```{r error=TRUE}
+null <- NULL
+
+null + l1
+null + n1
+null + d1
+null + c1
+
+l1 + null
+n1 + null
+d1 + null
+c1 + null
+```
+
+#### NaN (Not a Number)
+
+```{r error=TRUE}
+not_a_number <- NaN
+
+not_a_number + l1
+not_a_number + n1
+not_a_number + d1
+not_a_number + c1
+
+l1 + not_a_number
+n1 + not_a_number
+d1 + not_a_number
+c1 + not_a_number
+```
+
+#### Inf (Infinite)
+
+```{r error=TRUE}
+infinite <- Inf
+
+infinite + l1
+infinite + n1
+infinite + d1
+infinite + c1
+
+l1 + infinite
+n1 + infinite
+d1 + infinite
+c1 + infinite
+```
+
+### 데이터 타입 확인 및 변환
+
+| 데이터 타입 | 타입 확인 | 타입 변환 |
+|:----:|:----:|:----:|
+| mode | mode(x) | \- |
+| typeof | type(x) | \- |
+| class | class(x) | \- |
+| str | str(x) | \- |
+| logical | is.logical(x) | as.logical(x) |
+| numeric | is.numeric(x) | as.numeric(x) |
+| integer | is.integer(x) | as.integer(x) |
+| double | is.double(x) | as.double(x) |
+| character | is.character(x) | as.character(x) |
+| na | is.na(x)  | \- |
+| null | is.null(x) | as.null(x) |
+| nan | is.nan(x)  | \- |
+| inf | is.infinite(x) | \- |
+
+```{r}
+mode(l1)
+mode(n1)
+mode(d1)
+mode(c1)
+mode(not_available)
+mode(null)
+mode(not_a_number)
+mode(infinite)
+```
+
+```{r}
+typeof(l1)
+typeof(n1)
+typeof(d1)
+typeof(c1)
+typeof(not_available)
+typeof(null)
+typeof(not_a_number)
+typeof(infinite)
+```
+
+```{r}
+class(l1)
+class(n1)
+class(d1)
+class(c1)
+class(not_available)
+class(null)
+class(not_a_number)
+class(infinite)
+```
+
+```{r}
+is.logical(l1)
+is.numeric(l1)
+is.integer(l1)
+is.double(l1)
+is.character(l1)
+is.na(l1)
+is.null(l1)
+is.nan(l1)
+is.infinite(l1)
+```
+
+```{r}
+as.logical(l1)
+as.numeric(l1)
+as.integer(l1)
+as.double(l1)
+as.character(l1)
+as.null(l1)
+```
+
+* 정수형 명시적 표기
+
+```{r}
+int1 <- 5
+int2 <- 5L
+
+typeof(int1)
+typeof(int2)
+```
+
+
+### 연습문제
+
+1.  다음의 결과값을 계산하시오.
+
+```{r}
+1/0
+0/0
+Inf - Inf
+NULL + Inf
+NA & NA
+Inf & Inf
+NULL & NA
+NULL & NULL
+NaN & NaN
+```
+
+## 데이터 구조 (Data Structure)
+
+* 스칼라(scalar)
+* 벡터(vector)
+* 팩터(factor)
+* 행렬(matrix)
+* 배열(array)
+* 데이터프레임(dataframe)
+* 리스트(list)
+
+### 스칼라 (scalar)
+
+* 일차원 상의 원소(값) 하나
+
+```{r}
+l1
+n1
+d1
+c1
+not_available
+null
+not_a_number
+infinite
+```
+
+### 벡터 (Vector)
+
+* 데이터 처리의 기본이 되는 단위로 1차원 배열
+* 같은 데이터 타입의 원소만 저장
+
+#### 생성함수
+
+```{r}
+vector(mode = "logical", length = 5)
+vector(mode = "numeric", length = 5)
+vector(mode = "character", length = 5)
+
+vec_l <- c(TRUE, FALSE, TRUE, TRUE)
+vec_n <- c(1L, 2L, 3L, 4L, 5L)
+vec_d <- c(1.1,  2.2,  3.3,  4.4)
+vec_c <- c("A", "B", "C")
+```
+
+#### 원소접근
+
+##### 색인으로 접근
+
+```{r}
+vec_l[1]
+vec_l[-2]
+vec_n[c(2,4)]
+vec_d[-c(3,5)]
+vec_c[1:2]
+vec_c[-c(1:2)]
+vec_d[vec_d>3]
+vec_c[vec_c != "A"]
+```
+
+##### 이름으로 접근
+
+```{r}
+names(vec_l)
+```
+
+```{r}
+names(vec_l) <- c("Test1", "Test2", "Test3", "Test4")
+names(vec_l)
+```
+```{r}
+vec_l[2]
+vec_l["Test2"]
+```
+
+#### 연산
+
+```{r error=TRUE}
+vec_l + vec_l
+vec_n + vec_n
+vec_d + vec_d
+vec_c + vec_c
+```
+
+```{r}
+vec_l + TRUE
+```
+
+```{r}
+vec_n + 1
+vec_n + vec_n
+vec_n * 2
+vec_n * vec_n
+```
+
+```{r}
+vec_n + c(1,2)
+c(1+1, 2+2, 3+1, 4+2, 5+1)
+```
+
+```{r}
+vec_d + c(1,2)
+c(1.1+1, 2.2+2, 3.3+1, 4.4+2)
+```
+
+#### 원소 추가 변경 삭제
+
+##### 추가
+
+```{r}
+vec_n2 <- c(vec_n, 6) 
+```
+
+```{r}
+vec_n3 <- c(vec_n2, c(7,8,9))
+```
+
+##### 변경
+
+```{r}
+vec_n3[1] <- 10
+```
+
+```{r}
+vec_n3[c(1,2,3)] <- c(10,20,30)
+```
+
+```{r}
+vec_n3[c(7:9)] <- vec_n3[c(7:9)] * 2
+```
+
+##### 삭제
+
+```{r}
+vec_n3[-9]
+```
+
+```{r}
+vec_n3[-c(1:3)]
+```
+
+```{r}
+vec_n3[!c(vec_n3 > 10)]
+```
+
+#### 관련함수 및 팁
+
+* seq()
+
+```{r}
+seq(from = 1, to = 5, by = 1)
+seq(from = 1, to = 9, by = 3)
+seq(0, 10, length.out = 11)
+seq(from = 1, to = 9, by = pi)
+seq(10)
+```
+
+* rep()
+
+```{r}
+rep(x = 1, times = 5)
+rep(x = c(1,2), times = 5)
+rep(x = c(1,2), each = 5)
+rep(x = c(1,2,3), length.out = 10)
+rep(x = c(1,2), c(3,2))
+```
+
+```{r}
+class(1:3)
+class(c(1:3))
+class(seq(1, 3, 1))
+class(rep(1, 5))
+```
+
+### 팩터
+
+* 범주형 자료를 표현하기 위한 벡터
+
+#### 생성함수
+
+```{r}
+fct_nominal <- factor(x = c("Pass", "Pass", "Fail", "Pass"),
+               levels = c("Pass", "Fail"))
+fct_nominal
+```
+
+#### 원소접근
+
+* 벡터와 동일
+
+#### 연산
+
+* 범주형 자료로 연산 불가
+
+```{r}
+fct_nominal[1] + fct_nominal[3]
+fct_nominal[1] > fct_nominal[3]
+```
+
+* 순서형 자료일 경우 비교 연산 가능
+
+```{r}
+fct_ordinal <- factor(x = c("A", "C", "C", "B", "D"),
+                      levels = c("F", "D", "C", "B", "A"),
+                      ordered = T)
+```
+
+```{r}
+fct_ordinal[1] > fct_ordinal[4]
+fct_ordinal[1] - fct_ordinal[2]
+```
+
+#### 원소 추가 변경 삭제
+
+* 벡터와 동일
+
+#### 관련함수 및 팁
+
+* forcats 패키지에서 factor형 자료 처리 함수 지원
+
+```{r}
+forcats::fct_relevel(fct_ordinal, c("D", "C", "B", "A", "F"))
+```
+
+### 행렬
+
+* 2차원(행과 열) 벡터 구조
+
+#### 생성함수
+
+```{r}
+matrix(1:12, nrow = 3, ncol = 4)
+matrix(1:12, nrow = 3, ncol = 4, byrow = TRUE)
+matrix(1:12, nrow = 3, ncol = 4, 
+       dimnames = list(c("r1","r2", "r3"), c("c1", "c2", "c3", "c4")))
+```
+
+#### 원소접근
+
+##### 색인으로 접급
+
+```{r}
+mat_n <- matrix(1:12, nrow = 3, ncol = 4)
+mat_n[1,]
+mat_n[,2]
+mat_n[2,2]
+mat_n[c(1,2),]
+mat_n[c(1,2),c(3,4)]
+mat_n[,-c(2,3)]
+```
+
+##### 이름으로 접근
+
+```{r}
+mat_n_named <- matrix(1:12, nrow = 3, ncol = 4, 
+       dimnames = list(c("r1","r2", "r3"), c("c1", "c2", "c3", "c4")))
+mat_n_named["r1", ]
+mat_n_named[c("r1", "r2"), c(2:4)]
+```
+
+#### 연산
+
+```{r error=TRUE}
+mat_1 <- matrix(1:6, 2, 3)
+mat_2 <- matrix(7:12, 2, 3)
+
+mat_1 + mat_2
+mat_1 * mat_2
+mat_1 %*% mat_2
+mat_1 %*% t(mat_2)
+```
+
+#### 원소 추가 변경 삭제
+
+##### 추가
+
+```{r}
+cbind(mat_1, c(7, 8))
+rbind(mat_1, c(10, 11, 12))
+```
+
+##### 변경
+
+```{r}
+mat_1[2,3] <- 100
+mat_1
+
+mat_1[,1] <- c(0, 0)
+mat_1
+```
+
+
+##### 삭제
+
+```{r}
+mat_1[, -2]
+```
+
+
+#### 관련함수 및 팁
+
+* 행렬의 차원
+
+```{r}
+dim(mat_n)
+```
+
+```{r}
+mat_3 <- c(1:12)
+dim(mat_3) <- c(3,4)
+mat_3
+```
+
+* 행/열 개수 
+```{r}
+nrow(mat_n)
+ncol(mat_n)
+```
+
+* 행/열 이름
+
+```{r}
+dimnames(mat_3)
+
+rownames(mat_3) <- c("r1", "r2", "r3")
+
+colnames(mat_3) <- c("c1", "c2", "c3", "c4")
+
+dimnames(mat_3) <- list(c(1:3), 
+                        c("A", "B", "C", "D"))
+```
+
+* 자료구조 유지하기
+
+```{r}
+mat_n[, 1]
+mat_n[, 1, drop = FALSE]
+```
+
+#### 연습문제
+
+1. 다음 원소의 값을 계산하시오.
+
+```{r}
+mat_ex <- matrix(1:12, nrow = 3, ncol = 4, byrow = TRUE)
+mat_ex[8]
+```
+
+2. 다음 행렬을 계산하시오.
+
+```{r}
+matrix(c(1:3), 4, 4)
+```
+### 배열
+
+* 행렬의 집합으로 n차원의 구조
+
+#### 생성함수
+
+```{r}
+rname <- c("r1", "r2", "r3")
+cname <- c("c1", "c2", "c3")
+dname <- c("d1", "d2", "d3")
+
+array(c(1:3*3*3), dim = c(3,3,3))
+array(c(1:3*3*3), dim = c(3,3,3), 
+      dimnames = list(rname, cname, dname))
+```
+
+#### 원소접근
+
+* 행렬과 동일
+
+#### 연산
+
+* 행렬과 동일
+
+#### 원소 추가 변경 삭제
+
+* 행렬과 동일
+
+#### 관련함수 및 팁
+
+### 데이터프레임
+
+* 데이터 속성이 다른 벡터 보임
+* 엑셀 시트와 같이 정규화된 테이블 형태
+
+#### 생성함수
+
+```{r}
+data.frame(
+  c_logical = c(TRUE, FALSE, TRUE),
+  c_numeric = c(1,2,3),
+  c_character = c("A", "B", "C")
+)
+
+data.frame(
+  c_logical = c(TRUE, FALSE, TRUE),
+  c_numeric = c(1,2,3),
+  c_character = c("A", "B", "C"),
+  stringsAsFactors = TRUE
+)
+```
+
+#### 원소접근
+
+##### 색인로 접근
+
+```{r}
+df_score <- data.frame(
+  c("Kim", "Lee", "Park"),
+  c(92, 45, 75),
+  c("A", "F", "C"),
+  c(TRUE, FALSE, TRUE)
+)
+```
+
+```{r}
+df_score[1,]
+df_score[,2]
+df_score[c(1,2),]
+df_score[,c(2,3)]
+df_score[df_score[,2]>60,]
+```
+
+##### 이름으로 접근
+
+```{r}
+df_score <- data.frame(
+  name = c("Kim", "Lee", "Park"),
+  score = c(92, 45, 75),
+  grade = c("A", "F", "C"),
+  pass = c(TRUE, FALSE, TRUE)
+)
+
+df_score[1,]
+df_score[,2]
+df_score[c(1,2),]
+df_score[,c(2,3)]
+df_score[df_score[,2]>60,]
+
+df_score
+df_score$name
+df_score[c(1,2), c("name", "score")]
+df_score$score[df_score$score>60]
+df_score[df_score$pass == FALSE, ]
+```
+
+#### 원소 추가 변경 삭제
+
+* 배열과 동일
+
+#### 관련함수 및 팁
+
+* subset()
+
+```{r}
+subset(df_score, score > 60)
+subset(df_score, score > 60 & name == "Kim")
+subset(df_score, score > 60 & name == "Kim", select = grade)
+```
+
+* str()
+```{r}
+str(df_score)
+```
+
+### 리스트
+
+* 모든 데이터 타입을 담을 수 있는 구조
+
+#### 생성함수
+
+```{r}
+list(
+  TRUE, 
+  c(1,2,3),
+  matrix(1:4, 2, 2),
+  array(1:2*2*2, dim = c(2,2,2)),
+  data.frame(x = c(1,2,3), y = c("A", "B", "C")),
+  list(TRUE, 1, "A"),
+  c(mean, sd)
+)
+
+students <- c("S1", "S2", "S3", "S4")
+scores <- c(76, 92, 85, 54)
+students_scores <- list()
+students_scores[students] <- scores
+```
+
+#### 원소접근
+
+##### 색인으로 접근
+```{r}
+lst_no_name <- list(
+  TRUE, 
+  c(1,2,3),
+  matrix(1:4, 2, 2),
+  array(1:2*2*2, dim = c(2,2,2)),
+  data.frame(x = c(1,2,3), y = c("A", "B", "C")),
+  list(TRUE, 1, "A"),
+  c(mean, sd)
+)
+
+lst_no_name[[2]]
+lst_no_name[[3]][1,2]
+lst_no_name[[5]][1]
+```
+
+##### 이름으로 접근
+
+```{r}
+lst_named <- list(
+  t_logical = TRUE, 
+  t_vector = c(1,2,3),
+  t_matrix = matrix(1:4, 2, 2),
+  t_array = array(1:2*2*2, dim = c(2,2,2)),
+  t_dataframe = data.frame(x = c(1,2,3), y = c("A", "B", "C")),
+  t_list = list(TRUE, 1, "A"),
+  t_function = c(mean, sd)
+)
+
+lst_named$t_vector
+lst_named$t_matrix[1,2]
+```
+
+#### 원소 추가 변경 삭제
+
+##### 추가
+
+```{r}
+lst_1 <- list(name = "Kim", score = 92, grade = "A")
+
+lst_1[4] <- c(TRUE)
+lst_1[[5]]<- c(TRUE, FALSE)
+lst_1[6]<- c(TRUE, FALSE)
+lst_1[7]<- list(c(TRUE, FALSE))
+lst_1$age <- 20
+lst_1[["year"]] <- 2022
+lst_1["sex"] <- "female"
+lst_1["birth"] <- c("Jan", "01")
+lst_1["birth"] <- list(c("Jan", "01"))
+lst_1[12:15] <- list(12, 13, 14, 15)
+```
+
+##### 변경
+
+```{r}
+# 리스트 원소 하나에 하나의 값만 할당할 경우
+lst_1[2] <- 97
+lst_1[[2]] <- 95
+lst_1[["score"]] <- 92
+lst_1$score <- 91
+
+# 리스트 원소 하나에 2개 이상 값 할당할 경우
+lst_1[[2]]  <- c(85, 92)
+lst_1[2]  <- list(c(85, 92))
+
+# 리스트 원소 하나에 2개 이상 값 할당할 경우
+lst_1[c(2,3)]  <- list(c(92), c("A"))
+lst_1[c(2,3)]  <- list(c(92, 85), c("A"))
+```
+
+##### 삭제
+
+```{r}
+lst_1 <- list(name = "Kim", score = 92, grade = "A")
+
+lst_1$score <- NULL
+lst_1[c("name", "grade")] <- NULL
+```
+
+#### 관련함수 및 팁
+
+#### 연습문제
+
+1. lst_named의 7번째 원소의 첫번째 함수를 이용하여 1~9까지의 평균을 구하시오.
+
+```{r}
+lst_named$t_function[[1]](c(1:9))
+```
+
+------------------------------------------------------------------------
+
+# 데이터 조작
+
+## 제어문
+
+### if ~ else ~
+
+```{r}
+a <- 3
+if(a > 5) {
+  print("Over 5")
+} else {
+  print("Under 5")
+}
+
+b <- 80
+if(b >= 90) {
+  print("A")
+} else if(b >= 80) {
+  print("B")
+} else if(b >= 70) {
+  print("C")
+} else if(b >= 60) {
+  print("D")
+} else {
+  print("F")
+} 
+```
+
+### ifelse
+
+```{r}
+a <- 3
+a_over_5 <- ifelse(a > 5, TRUE, FALSE)
+
+b <- 7
+b_in_10 <- ifelse(b > 0 & b <= 10, TRUE, FALSE)
+```
+
+### for
+
+```{r}
+sum <- 0
+for(i in 1:10) {
+  sum <- sum + i
+}
+
+for(i in c("A", "B", "C")) {
+  print(i)
+}
+
+x <- c(1:9)
+for(i in c(mean, sd, var)) {
+  print(i(x))
+}
+```
+
+### while
+
+```{r}
+i <- 1
+while(TRUE) {
+  print(i)
+  i <- i + 1
+  if(i>3) break;
+}
+```
+
+## 사용자 정의 함수
+
+```{r}
+# 인자값 하나
+add_one <- function(x) {
+  x + 1
+}
+add_one(1)
+
+# 인자값 둘
+add_n <- function(x, n) {
+  x + n
+}
+add_n(1, 2)
+
+add_n_default <- function(x, n = 0) {
+  x + n
+}
+add_n_default(1)
+add_n_default(1,5)
+```
+
+```{r}
+udf_square_n <- function(x, n = 1) {
+  if(n == 0) {
+    return(1) # early return
+  } else if(x == 0) {
+    return(0) # early return
+  } else {
+    x ^ n
+  } 
+}
+udf_square_n(2, 0)
+udf_square_n(0, 0)
+udf_square_n(0, 1)
+udf_square_n(2, 2)
+```
+
+## 자료 추출
+
+### 자료 내 조건식
+
+```{r}
+df <- data.frame(
+  x = c(1,2,3,4,5,6,7),
+  y = c(2,4,8,4,3,9,6)
+)
+df[df$x > 4 & df$y > 4, ]
+```
+
+### subset
+
+```{r}
+subset(df, x>4 & y>4, select = y)
+```
+
+
+## 기타 유용한 함수
+
+### apply
+
+```{r}
+mat1 <- matrix(1:12, 3, 4)
+apply(X = mat1, MARGIN = 1, max)
+apply(X = mat1, MARGIN = 2, max)
+apply(X = mat1, MARGIN = 1, 
+      FUN = function(x) { max(x) + 3 })
+```
+
+### tapply
+
+```{r}
+tapply(X = 1:12, INDEX = factor(rep(c("A", "B", "C"), 4)), mean)
+
+mat2 <- cbind(X = 1:12,
+              INDEX = factor(rep(c("A", "B", "C"), 4)))
+mean(mat2[mat2[,"INDEX"] == 1, "X"])
+mean(mat2[mat2[,"INDEX"] == 2, "X"])
+mean(mat2[mat2[,"INDEX"] == 3, "X"])
+```
+
+### aggregate 함수
+
+```{r}
+aggregate(x = mat2, by = list(INDEX), mean)
+```
+
+
+## 연습문제
+
+1. 주어진 벡터 x에서 홀수 색인의 원소에만 1을 더하시오.
+
+```{r}
+x <- rep(1, 10)
+for(i in 1:10) {
+  if(i%%2 == 1) {
+    x[i] <- x[i] + 1
+  }
+}
+
+x <- rep(1, 10)
+for(i in 1:10) {
+  x[i] <- ifelse(i%%2 == 1, x[i] + 1, x[i]) 
+}
+
+x <- rep(1, 10)
+x + c(1,0)
+```
+
+
+------------------------------------------------------------------------
+
+# 시각화
+
+## plot
+
+```{r}
+penguins <- palmerpenguins::penguins
+```
+
+```{r}
+plot(0,0)
+```
+
+```{r}
+plot(0,0,
+     type = "n")
+```
+
+```{r}
+plot(0,0,
+     type = "n",
+     xlim = c(0, 20), ylim = c(0, 10))
+```
+
+```{r}
+plot(0,0,
+     type = "n",
+     xlim = c(0, 20), ylim = c(0, 10),
+     main = "Blank plot", xlab = "X Axis", ylab = "Y Axis")
+```
+
+```{r}
+plot(0,0,
+     type = "n",
+     xlim = c(0, 20), ylim = c(0, 10),
+     main = "Blank plot", xlab = "X Axis", ylab = "Y Axis")
+points(x = c(3,5,7,11,13,17),
+       y = c(1:6), 
+       pch = 19)
+abline(v = 0, h = 0, lty = 1)
+abline(a = 0, b = .4, lty = 2, col = "blue")
+```
+
+```{r}
+plot(penguins$bill_length_mm, penguins$bill_depth_mm,
+     xlim = range(penguins$bill_length_mm, na.rm = T), 
+     ylim = range(penguins$bill_depth_mm, na.rm = T),
+     main = "펭귄 종별 부리 깊이와 길이", 
+     xlab = "부리 길이", ylab = "부리 깊이",
+     pch = 19,
+     col = c("red", "green", "blue")[penguins$species])
+```
+```{r}
+with(penguins,
+  plot(bill_length_mm, bill_depth_mm,
+     xlim = range(bill_length_mm, na.rm = T), 
+     ylim = range(bill_depth_mm, na.rm = T),
+     main = "펭귄 종별 부리 깊이와 길이", 
+     xlab = "부리 길이", ylab = "부리 깊이",
+     pch = c(17:19)[species],
+     col = c("red", "green", "blue")[species],
+     cex.main = 1.5, cex.axis = .75)
+)
+```
+
+```{r}
+with(penguins,
+  plot(bill_length_mm, bill_depth_mm,
+     xlim = range(bill_length_mm, na.rm = T), 
+     ylim = range(bill_depth_mm, na.rm = T),
+     main = "펭귄 종별 부리 깊이와 길이", 
+     xlab = "부리 길이", ylab = "부리 깊이",
+     pch = c(17:19)[species],
+     col = c("red", "green", "blue")[species],
+     cex.main = 1.5, cex.axis = .75)
+)
+
+legend(55, 15, 
+       legend = c("Adelie", "Chinstrap", "Gentoo"),
+       col = c("red", "green", "blue"),
+       pch = 17:19,
+       bty = "n"
+)
+
+text(58, 21.5, labels = c("※ Dataset: penguins"), cex = .7)
+```
+
+```{r}
+mean_points <- aggregate(
+  cbind(x = bill_length_mm, y = bill_depth_mm) ~ species,
+  data = penguins, 
+  mean
+)
+
+{
+  with(penguins,
+    plot(bill_length_mm, bill_depth_mm,
+       xlim = range(bill_length_mm, na.rm = T), 
+       ylim = range(bill_depth_mm, na.rm = T),
+       main = "펭귄 종별 부리 깊이와 길이", 
+       xlab = "부리 길이", ylab = "부리 깊이",
+       pch = c(17:19)[species],
+       col = c("#99FFFF", "#FF99FF", "#FFFF99")[species],
+       cex.main = 1.5, cex.axis = .75)
+  )
+  
+  legend(55, 15, 
+         legend = c("Adelie", "Chinstrap", "Gentoo"),
+         col = c("#99FFFF", "#FF99FF", "#FFFF99"),
+         pch = 17:19,
+         bty = "n"
+  )
+  
+  text(58, 21.5, labels = c("※ Dataset: penguins"), cex = .7)
+  
+  text(mean_points$x, mean_points$y, "*", cex = 2, col = "black")
+  text(mean_points$x, mean_points$y, mean_points$species, 
+       adj = c(0.1, 1.5), col = "black")
+}
+```
+
+## 히스토그램
+
+## 막대 도표
+
+## 선 도표
+
+## 모자익 도표
+
+------------------------------------------------------------------------
+
+# 기초 통계
+
+## 중심화 경향
+
+## 퍼짐 정도
+
+## 치우침 정도
+
+------------------------------------------------------------------------
+
+# 통계 분석
+
+## 상관 분석
+
+## 회귀 분석
+
+------------------------------------------------------------------------
+
+# 참고 자료
+
+## RStudio 단축키 및 팁
+
+## R 문서 작성
+
+### 마크다운
+
+### RMarkdown
+
+**EOF**

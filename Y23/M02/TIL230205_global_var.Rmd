@@ -1,5 +1,5 @@
 ---
-title: "local variable vs. global variable in r"
+title: "공분산과 상관계수 in r"
 output: html_document
 date: "`r Sys.Date()`"
 ---
@@ -16,24 +16,105 @@ pg <- palmerpenguins::penguins
 library(tidyverse)
 ```
 
-## local variable vs. global variable in r
+## 공분산과 상관계수 in r
+
+
+### cov
+
+$$
+E(X) = \mu, \; E(Y) = \nu \\
+Cov(Y, Y) = E((X - \mu)(Y - \nu))
+$$
+
+X, Y가 독립이면 E(XY) = E(x)E(Y) = $\mu\nu$이다.
 
 ```{r}
-g_variable <- 10
-print_variable <- function(variable, global = FALSE) {
-  if(global == TRUE) {
-    g_variable <<- variable
-  } else {
-    g_variable <- variable
-  }
-  print(g_variable)
-} 
+options(digits = 7)
+pg_na_omitted <- na.omit(pg)
+pg_sub <- pg[, c(3,4)]
+pg_sub[is.na(pg$sex), ] <- NA
 
-print_variable(5, TRUE)
-g_variable
+pg_bill_length <- pg_na_omitted$bill_length_mm
+pg_bill_depth <- pg_na_omitted$bill_depth_mm
 
-g_variable <- 10
-print_variable(5, FALSE)
-g_variable
+sum((pg_bill_length-mean(pg_bill_length))*(pg_bill_depth-mean(pg_bill_depth)))/
+  (length(pg_bill_length)-1)
 ```
 
+```{r}
+cov(pg_bill_length, pg_bill_depth)
+```
+
+```{r}
+pg_sub[sample(1:length(pg_sub$bill_length_mm), 10), "bill_length_mm"] <- NA
+colSums(is.na(pg_sub))
+```
+
+
+```{r}
+cov(pg_sub$bill_length_mm, pg_sub$bill_depth_mm, use = "complete")
+```
+
+```{r}
+cov(pg_sub$bill_length_mm, pg_sub$bill_depth_mm, use = "na.or.complete")
+```
+
+```{r}
+cov(pg_sub$bill_length_mm, pg_sub$bill_depth_mm, use = "pairwise")
+```
+
+### cor 
+
+```{r}
+cov(pg_bill_length, pg_bill_depth)/(sd(pg_bill_length)*sd(pg_bill_depth))
+```
+
+
+
+
+```{r}
+cor(pg_bill_length, pg_bill_depth)
+```
+
+```{r}
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...) {
+    usr <- par("usr")
+    on.exit(par(usr))
+    par(usr = c(0, 1, 0, 1))
+    Cor <- abs(cor(x, y)) # Remove abs function if desired
+    txt <- paste0(prefix, format(c(Cor, 0.123456789), digits = digits)[1])
+    if(missing(cex.cor)) {
+        cex.cor <- 0.4 / strwidth(txt)
+    }
+    text(0.5, 0.5, txt,
+         cex = 1 + cex.cor * Cor) # Resize the text by level of correlation
+}
+
+
+panel.hist <- function(x, ...) {
+    usr <- par("usr")
+    on.exit(par(usr))
+    par(usr = c(usr[1:2], 0, 1.5))
+    his <- hist(x, plot = FALSE)
+    breaks <- his$breaks
+    nB <- length(breaks)
+    y <- his$counts
+    y <- y/max(y)
+    rect(breaks[-nB], 0, breaks[-1], y, col = rgb(0, 1, 1, alpha = 0.5), ...)
+    # lines(density(x), col = 2, lwd = 2) # Uncomment to add density lines
+}
+
+pairs(data.frame(`Bill Length` = na.omit(pg$bill_length_mm), 
+                 `Bill Depth` = na.omit(pg$bill_depth_mm)),
+      upper.panel = panel.cor, diag.panel = panel.hist)
+```
+```{r}
+{ plot(pg_bill_length, pg_bill_depth, pch = 19)
+abline(lm(pg_bill_depth ~ pg_bill_length), col = "red", lwd = 3)
+text(paste("Correlation:", round(cor(pg_bill_length, pg_bill_depth), 4)),
+     x = 36, y = 13.3, ajd = c(0, 0.5), cex = 1.2)
+}
+```
+
+
+.EOD.

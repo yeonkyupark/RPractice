@@ -69,4 +69,21 @@ text(paste("Correlation:",
 ```
 
 
+```{r echo=FALSE}
+pg %>% 
+  ggplot(aes(bill_length_mm, bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Linear Regression with out Species") + theme_bw()
+```
+
+```{r echo=FALSE}
+pg %>% 
+  ggplot(aes(bill_length_mm, bill_depth_mm, col = species)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Linear Regression with Species") + theme_bw()
+```
+
+
 .EOD.

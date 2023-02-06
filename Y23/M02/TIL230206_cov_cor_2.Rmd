@@ -81,8 +81,9 @@ pg %>%
 pg %>% 
   ggplot(aes(bill_length_mm, bill_depth_mm, col = species)) +
   geom_point() +
-  geom_smooth(method = "lm") +
-  labs(title = "Linear Regression with Species") + theme_bw()
+  geom_smooth(method = "lm") + 
+  labs(title = "Linear Regression with Species") + theme_bw() +
+  theme(legend.position = c(0.9, 0.15))
 ```
 
 

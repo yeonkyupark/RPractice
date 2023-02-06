@@ -22,8 +22,9 @@ library(tidyverse)
 ### cov
 
 $$
-E(X) = \mu, \; E(Y) = \nu \\
-Cov(Y, Y) = E((X - \mu)(Y - \nu))
+Population: Cov(X, Y) = E((X - \mu_X)(Y - \mu_Y))
+\\ \; \\
+Sample: S_{XY} = \frac{1}{n-1}\sum_{i=1}^n(x_i-\bar x)(y_i - \bar y)
 $$
 
 X, Y가 독립이면 E(XY) = E(x)E(Y) = $\mu\nu$이다.
@@ -66,8 +67,10 @@ cov(pg_sub$bill_length_mm, pg_sub$bill_depth_mm, use = "pairwise")
 ### cor 
 
 $$
-r = \frac{\sum[(x_i-\bar x)(y_i-\bar y)]}
-         {\sqrt{\sum(x_i-\bar x)^2 \times (y_i-\bar y)^2}}
+Population: \rho = \frac{Cov(X, Y)}{\sigma_X\sigma_Y} 
+\\ \; \\
+Sample: r = \frac{\sum_{i=1}^n[(x_i-\bar x)(y_i-\bar y)]}
+         {\sqrt{\sum_{i=1}^n(x_i-\bar x)^2 \times (y_i-\bar y)^2}}
 $$
 
 ```{r}

@@ -1,0 +1,46 @@
+---
+title: "join in r"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "#",
+	collapse = T
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## join in r
+
+source: https://www.youtube.com/watch?v=MzsBwc9_Ovc&list=PLY0OaF78qqGA42e0rXqBWCcF_C9Ib-T1x&index=43
+
+```{r}
+df1 <- data.frame(x = 1:6, y = month.name[1:6])
+df2 <- data.frame(x = 7:12, y = month.name[7:12])
+df3 <- bind_rows(df1, df2)
+
+df4 <- data.frame(z = month.abb)
+df5 <- bind_cols(df3, df4)
+
+band_members
+band_instruments
+
+inner_join(band_members, band_instruments, by = "name")
+left_join(band_members, band_instruments, by = "name")
+right_join(band_members, band_instruments, by = "name")
+full_join(band_members, band_instruments, by = "name")
+full_join(band_members, band_instruments2, by = c("name"="artist"))
+full_join(band_members, band_instruments2, by = c("name"="artist"), keep = T)
+
+semi_join(band_members, band_instruments, by = "name")
+anti_join(band_members, band_instruments, by = "name")
+```
+
+
+.EOD.

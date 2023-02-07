@@ -1,0 +1,69 @@
+---
+title: "출력 in r"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "#",
+	collapse = T
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## 출력 in r
+
+```{r}
+pi
+sqrt(pi)
+
+print(pi)
+print(sqrt(pi))
+
+print(matrix(1:4, 2, 2))
+print(list("A", "B", "C"))
+
+print("ABC", 123, TRUE, ".")
+cat("ABC", 123, TRUE, ".")
+cat("ABC", 123, TRUE, "\b.")
+cat("ABC", 123, TRUE, "\b.", "\n")
+
+language <- "R"
+cat("Hello", language, "\b.\n", "\t", "How are you?")
+
+lst <- list("A", "B", "C")
+cat(lst)
+cat(unlist(lst))
+
+pi
+print(pi*100, digits = 3)
+print(pi/100, digits = 3)
+
+cat(format(pi, digits=3), "\n")
+
+pnorm(-3:3)
+print(pnorm(-3:3), digits = 3)
+
+z <- c(0, 1.64, 1.96, 2.58)
+ptbl <- data.frame(Z=z, Lower=pnorm(-z), Upper=pnorm(z))
+ptbl
+print(ptbl, digits = 3)
+
+prime <- c(2,3,5,7,11,13,17,19)
+prime2 <- c(23)
+cat(prime, file="prime.txt", sep = "\t", "\n")
+cat(prime, file="prime.txt", sep = "\t", "\n")
+cat(prime2, file="prime.txt", sep = "\t", append = T, "\n")
+
+conn <- file("prime2.txt", open = "w")
+cat(prime, file = conn, sep = "\t", "\n")
+close(conn)
+
+```
+
+.EOD.

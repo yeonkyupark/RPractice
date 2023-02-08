@@ -1,0 +1,61 @@
+---
+title: "purrr in r"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "#",
+	collapse = T
+)
+pg <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## purrr in r
+
+```{r}
+df <- list(
+  l1 <- sample(100, 10),
+  l1 <- sample(100, 8),
+  l1 <- sample(100, 9),
+  l1 <- sample(100, 7)
+)
+
+map(.x = df, .f = mean)
+```
+
+```{r}
+map_dbl(df, mean)
+```
+
+```{r}
+map_dbl(df, mean, trim = 0.3)
+```
+
+```{r}
+df %>% 
+  map(range) %>% 
+  map_dbl(diff)
+```
+
+```{r}
+df %>% 
+  map(~.x * 1.1) 
+```
+
+```{r}
+group <- c("A", "B", "C")
+group %>% 
+  map_chr(paste, "Group", sep = "-")
+group %>% 
+  map_chr(~paste(.x, "Group", sep = "-"))
+
+```
+
+
+.EOD.

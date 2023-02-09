@@ -1,0 +1,28 @@
+---
+title: "snippets in r"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	comment = "#",
+	collapse = T
+)
+penguins <- palmerpenguins::penguins
+library(tidyverse)
+```
+
+## snippets in R
+
+Tools -\> Edit Code Snippets...
+
+``` r
+snippet 
+  in %in%
+```
+
+.EOD.

@@ -21,8 +21,10 @@ library(tidyverse)
 Tools -\> Edit Code Snippets...
 
 ``` r
-snippet 
-  in %in%
+snippet in
+  %in%
 ```
+
+To apply, `shift + tap`
 
 .EOD.
